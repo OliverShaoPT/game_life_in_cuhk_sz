@@ -43,6 +43,7 @@ public slots:
     //void slotBook();
     //void slotDate(int num);
     void slotEvent(QString str);
+    void slotHelp();
 
 private:
     View *view;
@@ -68,9 +69,9 @@ private:
     QAction *cheatLike;
     QAction *cheatGodMode;
     Cheat *cheats;
-    QAction *ToGo; //外卖
-    QAction *Chat;
-    QAction *Game;
+    QAction *callGrilfriend;
+    QAction *takeout;
+    QAction *help;
 
 };
 

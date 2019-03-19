@@ -11,6 +11,7 @@
 #include <QtMath>
 #include <QApplication>
 #include <QDebug>
+//test1
 
 // Constants
 const int kPixlen = 32;             // The pixels of each block
@@ -63,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // Set central widget and modify titile
     setCentralWidget(view);
     resize(550,450);
-    setWindowTitle(tr("Magic Tower"));
+    setWindowTitle(tr("SCHOOL LIFE"));
 
     // Welcome page
     Welcome();
@@ -95,6 +96,9 @@ void MainWindow::CreateActions() {           // Create all actions in mainwindow
     cheatLike = new QAction(tr("Like+100"), this);
     cheatMode = new QAction(tr("GodMode"), this);
 
+    callGrilfriend = new QAction(QString("CallGrilfriend"),this);
+    takeout = new QAction(QString("TakeOut"),this);
+    help = new QAction(QString("Help"),this);
     // newGame->setShortcut(tr("N"));
     // saveGame->setShortcut(tr("S"));
     // loadGame->setShortcut(tr("L"));
@@ -113,6 +117,8 @@ void MainWindow::CreateActions() {           // Create all actions in mainwindow
     connect(cheatGrade, SIGNAL(triggered()), cheats, SLOT(slotCheatGrade()));
     connect(cheatLike, SIGNAL(triggered()), cheats, SLOT(slotCheatGrade()));
     connect(cheatMode, SIGNAL(triggered()), cheats, SLOT(slotCheatMode()));
+    
+    connect(help,SIGNAL(triggered()),this,SLOT(slotHelp()));
 }
 
 
@@ -125,6 +131,12 @@ void MainWindow::CreateMenus() {             // Create all menus in mainwindow
     fileMenu->addSeparator();
     fileMenu->addAction(exitGame);
 
+    // phone menu
+    QMenu *Phone = menuBar()->addMenu(QString("Phone"));
+    Phone->addAction(callGrilfriend);
+    Phone->addAction(takeout);
+    Phone->addAction(help);
+    
     // cheat menuifferent ending according to sex
     QMenu *cheatMenu = menuBar()->addMenu(tr(" Cheat! "));
     cheatMenu->addAction(cheatEnergy);
@@ -142,20 +154,19 @@ void MainWindow::CreateMenus() {             // Create all menus in mainwindow
 void MainWindow::CreateInform() {           // Print player information
     AddPictureItem(-102, 0, "sidebg");
     AddPictureItem(-97, 30, "side");
-    AddPictureItem(-85, 5, "info1");
+    AddPictureItem(-93, 5, "info1");
     AddPictureItem(-65, 60, "sex"+QString::number(player.GetSex(), kDecimal));
     AddPictureItem(-82, 130, "info2");
     AddPictureItem(-83, 145, "info3");
     AddPictureItem(-83, 230, "info4");
-    AddTextItem(-50, 5, QString::number(player.GetPlace()+1, kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-65, 100, "Grade "+QString::number(player.GetGrade() +1, kDecimal), 10, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 126, QString::number(player.GetEnerge(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 142, QString::number(player.GetIQ(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 158, QString::number(player.GetEQ(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 174, QString::number(player.GetCharm(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 190, QString::number(player.GetMoney(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-    AddTextItem(-43, 206, QString::number(player.GetLike(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
-
+    AddTextItem(-60, 5, "STREET" /*+QString::number(player.GetPlace()+1, kDecimal)*/, 12, QColor(0,0,0));
+    AddTextItem(-62, 100, "DAY "+QString::number(player.GetGrade() +1, kDecimal), 10, QColor(0,0,0));
+    AddTextItem(-43, 127, QString::number(player.GetEnerge(), kDecimal), 12, QColor(0,0,0));
+    AddTextItem(-43, 154, QString::number(player.GetIQ(), kDecimal), 12, QColor(0,0,0));
+    AddTextItem(-43, 178, QString::number(player.GetEQ(), kDecimal), 12, QColor(0,0,0));
+    AddTextItem(-40, 228, QString::number(player.GetCharm(), kDecimal), 12, QColor(0,0,0));
+    AddTextItem(-40, 254, QString::number(player.GetMoney(), kDecimal), 12, QColor(0,0,0));
+    AddTextItem(-40, 281, QString::number(player.GetLike(), kDecimal), 12, QColor(0,0,0));
     //AddTextItem(-40, 240, QString::number(keys.GetYellow(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
     //AddTextItem(-40, 265, QString::number(keys.GetBlue(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
     //AddTextItem(-40, 290, QString::number(keys.GetRed(), kDecimal), 8, QColor(qrand()%256,qrand()%256,qrand()%256));
@@ -223,6 +234,14 @@ void MainWindow::slotNewGame() {        // Start a new game
     slotEvent("select");
 }
 
+
+void MainWindow::slotHelp(){
+    Clear();
+    view->SetStatus("help");
+    slotEvent("help");
+}
+
+
 void MainWindow::slotSaveGame() {           // Save data
     db.SaveMap(1);
     db.SaveTools(1);
@@ -268,7 +287,7 @@ void MainWindow::AddPlayerItem(int x, int y, int toward, int sex) {         // A
 }
 
 void MainWindow::AddTextItem(int x, int y, QString str, int size, QColor color) {           // Add a text string item
-    QFont font("Times", size);
+    QFont font("Arial", size);
     QGraphicsTextItem *item = new QGraphicsTextItem(str);
     item->setFont(font);
     item->setDefaultTextColor(color);
